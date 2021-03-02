@@ -1,5 +1,4 @@
 const sqlite3 = require('sqlite3').verbose();
-const { response } = require('express');
 const express = require('express');
 
 const inputCheck = require('./utils/inputCheck');
@@ -134,22 +133,6 @@ app.delete('/api/party/:id', (req, res) => {
 });
 
 
-// Delete a candidate
-app.delete('/api/candidate/:id', (req, res) => {
-    const sql = `DELETE FROM candidates WHERE id = ?`;
-    const params = [req.params.id];
-    db.run(sql, params, function(err, result) {
-      if (err) {
-        res.status(400).json({ error: res.message });
-        return;
-      }
-  
-      res.json({
-        message: 'successfully deleted',
-        changes: this.changes
-      });
-    });
-  });
 
 
 // Create a candidate
@@ -177,6 +160,24 @@ app.post('/api/candidate', ({ body }, res) => {
       });
     });
   });
+
+
+// Delete a candidate
+app.delete('/api/candidate/:id', (req, res) => {
+  const sql = `DELETE FROM candidates WHERE id = ?`;
+  const params = [req.params.id];
+  db.run(sql, params, function(err, result) {
+    if (err) {
+      res.status(400).json({ error: res.message });
+      return;
+    }
+
+    res.json({
+      message: 'successfully deleted',
+      changes: this.changes
+    });
+  });
+});
 
 
 // Default response for any other request(Not Found) Catch all
